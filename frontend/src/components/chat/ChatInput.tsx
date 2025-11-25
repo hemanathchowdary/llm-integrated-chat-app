@@ -42,7 +42,7 @@ export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
         disabled={!message.trim() || disabled}
         className="h-[60px] w-[60px] shrink-0 bg-gradient-primary hover:opacity-90 transition-opacity"
       >
-        <Send className="h-5 w-5" />
+        <Send className="h-5 w-5" />  
       </Button>
     </form>
   );

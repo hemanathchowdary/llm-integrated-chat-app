@@ -6,9 +6,6 @@ import { ValidationError, UnauthorizedError } from '../utils/errors';
 import { AuthenticatedRequest } from '../middleware/auth.middleware';
 
 const jwtSecret: Secret = env.jwtSecret;
-const jwtOptions: SignOptions = {
-  expiresIn: env.jwtExpiresIn,
-};
 
 const generateToken = (user: IUser): string => {
   const payload = {
@@ -17,7 +14,11 @@ const generateToken = (user: IUser): string => {
     role: user.role,
   };
 
-  return jwt.sign(payload, jwtSecret, jwtOptions);
+  const expiresIn = env.jwtExpiresIn as SignOptions['expiresIn'];
+
+  return jwt.sign(payload, jwtSecret, {
+    expiresIn,
+  });
 };
 
 const sanitizeUser = (user: IUser) => ({

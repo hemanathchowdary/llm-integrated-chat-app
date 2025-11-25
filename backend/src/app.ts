@@ -2,6 +2,8 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import { env } from './config/env';
 import authRoutes from './routes/auth.routes';
+import chatRoutes from './routes/chat.routes';
+import documentRoutes from './routes/document.routes';
 
 const app: Express = express();
 
@@ -25,9 +27,8 @@ app.get('/health', (req: Request, res: Response) => {
 
 // API routes
 app.use('/api/auth', authRoutes);
-// app.use('/api/chat', chatRoutes);
-// app.use('/api/faqs', faqRoutes);
-// app.use('/api/documents', documentRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/documents', documentRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {

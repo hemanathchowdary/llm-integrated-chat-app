@@ -4,6 +4,8 @@ import { MessageBubble } from "@/components/chat/MessageBubble";
 import { ChatInput } from "@/components/chat/ChatInput";
 import { TypingIndicator } from "@/components/chat/TypingIndicator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { apiClient } from "@/lib/api";
+import { toast } from "sonner";
 
 interface Message {
   id: string;
@@ -16,14 +18,14 @@ const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      text: "Hello! I'm your AI support assistant. How can I help you today?",
+      text: "Hello! I'm your AI support assistant. Ask me anything about your product or policies.",
       isUser: false,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
   const [isTyping, setIsTyping] = useState(false);
 
-  const handleSendMessage = (text: string) => {
+  const handleSendMessage = async (text: string) => {
     const newMessage: Message = {
       id: Date.now().toString(),
       text,
@@ -34,17 +36,30 @@ const Chat = () => {
     setMessages((prev) => [...prev, newMessage]);
     setIsTyping(true);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      const response = await apiClient.post<{ reply: string }>("/chat", {
+        message: text,
+      });
+
+      const aiText =
+        response.success && response.data?.reply
+          ? response.data.reply
+          : "I'm sorry, I couldn't generate a response right now.";
+
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: "Thank you for your message! I'm currently in demo mode. In a production environment, I would connect to an AI service like OpenAI, Gemini, or Claude to provide intelligent responses based on your uploaded knowledge base.",
+        text: aiText,
         isUser: false,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
+
       setMessages((prev) => [...prev, aiResponse]);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to contact AI service.";
+      toast.error(errorMessage);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   return (

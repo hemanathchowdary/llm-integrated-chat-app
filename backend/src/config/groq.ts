@@ -10,8 +10,9 @@ export const groqClient = env.groqApiKey
 
 // Default model configuration
 export const GROQ_MODELS = {
-  DEFAULT: 'llama-3.1-70b-versatile',
+  DEFAULT: 'openai/gpt-oss-120b',
   ALTERNATIVES: [
+    'llama-3.1-70b-versatile',
     'mixtral-8x7b-32768',
     'gemma-7b-it',
   ],

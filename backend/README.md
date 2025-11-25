@@ -69,6 +69,20 @@ More endpoints will be added as implementation progresses.
 - **Build**: `npm run build`
 - **Lint**: `npm run lint`
 
+## Promote a User to Admin
+
+Use the seed script to upgrade an existing user:
+
+```bash
+npm run promote-admin user@example.com
+```
+
+Requirements:
+
+- `MONGODB_URI` must be configured in `.env`
+- The user must already exist in the `users` collection
+- Script exits early if the user is already an admin
+
 ## License
 
 ISC

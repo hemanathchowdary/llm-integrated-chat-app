@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MessageSquare, Zap, Shield, Upload, ArrowRight } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Home = () => {
+  const { isAdmin } = useAuth();
   const features = [
     {
       icon: MessageSquare,
@@ -55,9 +57,11 @@ const Home = () => {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
-          <Button asChild size="lg" variant="outline">
-            <Link to="/admin">Admin Dashboard</Link>
-          </Button>
+          {isAdmin && (
+            <Button asChild size="lg" variant="outline">
+              <Link to="/admin">Admin Dashboard</Link>
+            </Button>
+          )}
         </div>
       </section>
 
@@ -96,8 +100,9 @@ const Home = () => {
       <section className="rounded-2xl bg-gradient-hero border p-8 md:p-12 text-center space-y-6">
         <h2 className="text-3xl font-bold tracking-tight">Ready to Get Started?</h2>
         <p className="mx-auto max-w-2xl text-muted-foreground">
-          Experience the power of AI-driven customer support. Start chatting now or set up your
-          knowledge base in the admin panel.
+          {isAdmin
+            ? "Experience the power of AI-driven customer support. Start chatting now or set up your knowledge base in the admin panel."
+            : "Experience the power of AI-driven customer support. Start chatting now and let your admin handle the knowledge base setup."}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Button asChild size="lg" className="bg-gradient-primary hover:opacity-90 transition-opacity">
@@ -106,6 +111,11 @@ const Home = () => {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
+          {isAdmin && (
+            <Button asChild size="lg" variant="outline">
+              <Link to="/admin">Open Admin Panel</Link>
+            </Button>
+          )}
         </div>
       </section>
     </div>
